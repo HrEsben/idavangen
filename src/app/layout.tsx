@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Idavang - Skolevægring & Trivsel",
-  description: "Sporing af skolevægring og trivsel",
+  title: "Reschool - På vej til større trivsel",
+  description: "På vej til større trivsel",
 };
 
 export default function RootLayout({

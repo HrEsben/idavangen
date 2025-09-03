@@ -130,7 +130,7 @@ export default function AppContent({ user, onLogout }: AppContentProps) {
           <Toolbar>
             <School sx={{ mr: 2 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Idavang - Skolevægring & Trivsel
+              Reschool - På vej til større trivsel
             </Typography>
             
             {/* User Info */}
@@ -184,7 +184,7 @@ export default function AppContent({ user, onLogout }: AppContentProps) {
             >
               <Tab 
                 icon={<Dashboard />} 
-                label="Dashboard" 
+                label="Oversigt" 
                 iconPosition="start"
                 sx={{ textTransform: 'none', minHeight: 64 }}
               />

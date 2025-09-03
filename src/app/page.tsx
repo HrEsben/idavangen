@@ -1,30 +1,49 @@
 'use client';
 
 import { useUser } from '@stackframe/stack';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import AppContent from '@/components/AppContent';
-import { CircularProgress, Box } from '@mui/material';
+import CustomSignIn from '@/components/CustomSignIn';
+import { Box, Typography, Paper } from '@mui/material';
 
 export default function Home() {
   const user = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/handler/sign-in');
-    }
-  }, [user, router]);
 
   if (!user) {
     return (
-      <Box 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center" 
-        minHeight="100vh"
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 2,
+        }}
       >
-        <CircularProgress />
+        <Paper
+          elevation={24}
+          sx={{
+            padding: 4,
+            borderRadius: 3,
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            maxWidth: 400,
+            width: '100%',
+          }}
+        >
+          {/* Header */}
+          <Box textAlign="center" mb={3}>
+            <Typography variant="h4" component="h1" gutterBottom color="primary">
+              Reschool
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              På vej til større trivsel
+            </Typography>
+          </Box>
+
+          {/* Login Form */}
+          <CustomSignIn />
+        </Paper>
       </Box>
     );
   }

@@ -101,7 +101,7 @@ export default function LogDashboard({ user }: LogDashboardProps) {
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-            📊 Dashboard
+            📊 Oversigt
           </h2>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

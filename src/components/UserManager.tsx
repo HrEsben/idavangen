@@ -24,10 +24,10 @@ export default function UserManager() {
         const data = await response.json();
         setUsers(data);
       } else {
-        setError('Failed to fetch users');
+        setError('Kunne ikke hente brugere');
       }
     } catch (error) {
-      setError('Error fetching users');
+      setError('Fejl ved hentning af brugere');
     } finally {
       setLoading(false);
     }
@@ -53,10 +53,10 @@ export default function UserManager() {
         fetchUsers(); // Refresh the list
       } else {
         const errorData = await response.json();
-        setError(errorData.error || 'Failed to create user');
+        setError(errorData.error || 'Kunne ikke oprette bruger');
       }
     } catch (error) {
-      setError('Error creating user');
+      setError('Fejl ved oprettelse af bruger');
     } finally {
       setCreating(false);
     }
@@ -76,16 +76,16 @@ export default function UserManager() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">User Management</h2>
+      <h2 className="text-2xl font-bold mb-6">Brugerstyring</h2>
       
       {/* Create User Form */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold mb-4">Add New User</h3>
+        <h3 className="text-lg font-semibold mb-4">Tilføj ny bruger</h3>
         <form onSubmit={createUser} className="space-y-4">
           <div>
             <input
               type="text"
-              placeholder="Name"
+              placeholder="Navn"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -107,7 +107,7 @@ export default function UserManager() {
             disabled={creating}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {creating ? 'Creating...' : 'Add User'}
+            {creating ? 'Opretter...' : 'Tilføj bruger'}
           </button>
         </form>
         {error && (
@@ -118,11 +118,11 @@ export default function UserManager() {
       {/* Users List */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold">Users ({users.length})</h3>
+          <h3 className="text-lg font-semibold">Brugere ({users.length})</h3>
         </div>
         <div className="p-6">
           {users.length === 0 ? (
-            <p className="text-gray-500">No users found. Add your first user above!</p>
+            <p className="text-gray-500">Ingen brugere fundet. Tilføj din første bruger ovenfor!</p>
           ) : (
             <div className="space-y-4">
               {users.map((user) => (
