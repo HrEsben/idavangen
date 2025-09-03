@@ -1,12 +1,12 @@
-# Idavang - Next.js with Vercel Postgres
+# Idavang - Next.js with Neon Database
 
-A modern Next.js application with Vercel Postgres database integration, built with TypeScript and Tailwind CSS.
+A modern Next.js application with Neon PostgreSQL database integration, built with TypeScript and Tailwind CSS.
 
 ## Features
 
 - ⚡️ Next.js 15 with App Router
 - 🎨 Tailwind CSS for styling
-- 🗄️ Vercel Postgres database integration
+- 🗄️ Neon PostgreSQL database integration
 - 📝 TypeScript for type safety
 - 🔧 ESLint for code quality
 - 🚀 Ready for Vercel deployment
@@ -59,26 +59,24 @@ src/
    - Connect the repository to Vercel
    - Deploy the project
 
-2. **Add Vercel Postgres**
-   - Go to your Vercel dashboard
-   - Navigate to your project
-   - Go to the "Storage" tab
-   - Click "Create Database" → "Postgres"
-   - Follow the setup wizard
+2. **Add Neon Database**
+   - Go to your Vercel project dashboard
+   - Navigate to the "Integrations" tab
+   - Find and install "Neon" from the marketplace
+   - Follow the setup wizard to create a new database
 
 3. **Connect Database**
-   - Vercel will automatically add the environment variables
+   - Neon will automatically add the `DATABASE_URL` environment variable
    - Redeploy your project
    - Your database is now ready!
 
 #### Option 2: Local Development with Remote Database
 
-1. **Create a Vercel Postgres database** (even without deploying)
-2. **Get your connection string** from the Vercel dashboard
-3. **Update `.env.local`** with your database credentials:
+1. **Create a Neon database** at [neon.tech](https://neon.tech)
+2. **Get your connection string** from the Neon dashboard
+3. **Update `.env.local`** with your database URL:
    ```env
-   POSTGRES_URL="your-connection-string"
-   # ... other variables from Vercel
+   DATABASE_URL="postgresql://username:password@hostname/database"
    ```
 
 ## Database Schema
@@ -101,17 +99,10 @@ CREATE TABLE users (
 
 ## Environment Variables
 
-When you connect Vercel Postgres, these variables are automatically added:
+When you connect Neon database via Vercel marketplace, this variable is automatically added:
 
 ```env
-POSTGRES_URL=""
-POSTGRES_PRISMA_URL=""
-POSTGRES_URL_NO_SSL=""
-POSTGRES_URL_NON_POOLING=""
-POSTGRES_USER=""
-POSTGRES_HOST=""
-POSTGRES_PASSWORD=""
-POSTGRES_DATABASE=""
+DATABASE_URL="postgresql://username:password@hostname/database"
 ```
 
 ## Deployment
@@ -161,21 +152,23 @@ npm run lint         # Run ESLint
 
 ## Free Tier Limits
 
-**Vercel Postgres Free Tier:**
-- 60MB storage
-- 256MB RAM
-- 1 database per team
-- Perfect for small projects and prototypes
+**Neon PostgreSQL Free Tier:**
+- 10GB storage
+- 1 database
+- 100 hours of compute time per month
+- Automatic scaling and branching
+- Perfect for development and production
 
-## Why Vercel Postgres?
+## Why Neon?
 
-Since you're already deploying on Vercel and have used up your Supabase free tier, Vercel Postgres is the perfect choice because:
+Since you're deploying on Vercel and have used up your Supabase free tier, Neon is an excellent choice because:
 
-1. **Seamless Integration** - Zero configuration needed
-2. **Automatic Environment Variables** - No manual setup required
-3. **Edge Runtime Compatible** - Fast global performance
-4. **Built for Next.js** - Optimized for serverless functions
-5. **Free Tier Available** - Great for development and small projects
+1. **Vercel Integration** - Available in Vercel marketplace
+2. **Generous Free Tier** - 10GB storage vs 60MB from others
+3. **Serverless Architecture** - Automatically scales to zero
+4. **Modern PostgreSQL** - Latest features and performance
+5. **Branching** - Create database branches like Git
+6. **Global Performance** - Low latency worldwide
 
 ## Contributing
 

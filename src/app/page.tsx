@@ -9,7 +9,7 @@ export default function Home() {
             Idavang Project
           </h1>
           <p className="text-lg text-gray-600">
-            Next.js with Vercel Postgres Integration
+            Next.js with Neon Database Integration
           </p>
         </header>
         
@@ -23,13 +23,13 @@ export default function Home() {
                 <strong>1.</strong> Deploy this project to Vercel
               </p>
               <p className="text-gray-700">
-                <strong>2.</strong> Go to your Vercel dashboard → Storage → Create Database → Postgres
+                <strong>2.</strong> Go to your Vercel project → Integrations → Add Neon
               </p>
               <p className="text-gray-700">
-                <strong>3.</strong> Connect the database to your project
+                <strong>3.</strong> Follow the setup to create a Neon database
               </p>
               <p className="text-gray-700">
-                <strong>4.</strong> The environment variables will be automatically configured
+                <strong>4.</strong> The DATABASE_URL will be automatically configured
               </p>
               <p className="text-gray-700">
                 <strong>5.</strong> Redeploy and your database will be ready to use!

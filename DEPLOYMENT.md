@@ -21,10 +21,10 @@
 
 3. **Add Database**
    - After deployment, go to your project dashboard
-   - Navigate to "Storage" tab
-   - Click "Create Database" → "Postgres"
-   - Click "Create & Continue"
-   - The environment variables will be automatically added
+   - Navigate to "Integrations" tab
+   - Find "Neon" in the marketplace and click "Add"
+   - Follow the setup wizard to create a new database
+   - The `DATABASE_URL` environment variable will be automatically added
 
 4. **Redeploy**
    - Go to "Deployments" tab
@@ -49,17 +49,10 @@
 
 ## Environment Variables
 
-The following variables will be automatically set when you add Vercel Postgres:
+The following variable will be automatically set when you add Neon via Vercel marketplace:
 
 ```env
-POSTGRES_URL
-POSTGRES_PRISMA_URL  
-POSTGRES_URL_NO_SSL
-POSTGRES_URL_NON_POOLING
-POSTGRES_USER
-POSTGRES_HOST
-POSTGRES_PASSWORD
-POSTGRES_DATABASE
+DATABASE_URL
 ```
 
 ## Post-Deployment Checklist

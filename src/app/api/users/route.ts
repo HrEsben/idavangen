@@ -3,6 +3,13 @@ import { createUsersTable, getUsers, createUser } from '@/lib/db';
 
 export async function GET() {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Database not configured. Please add Neon database integration in Vercel.' },
+        { status: 503 }
+      );
+    }
+    
     // Ensure the users table exists
     await createUsersTable();
     
@@ -28,6 +35,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Database not configured. Please add Neon database integration in Vercel.' },
+        { status: 503 }
+      );
+    }
+    
     const { name, email } = await request.json();
     
     if (!name || !email) {
