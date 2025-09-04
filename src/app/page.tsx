@@ -1,14 +1,34 @@
 'use client';
 
-import { useUser } from '@stackframe/stack';
+import { useSession } from 'next-auth/react';
 import AppContent from '@/components/AppContent';
-import CustomSignIn from '@/components/CustomSignIn';
+import NextAuthSignIn from '@/components/NextAuthSignIn';
 import { Box, Typography, Paper } from '@mui/material';
 
 export default function Home() {
-  const user = useUser();
+  const { data: session, status } = useSession();
 
-  if (!user) {
+  // Debug logging
+  console.log('Page session status:', status);
+  console.log('Page session data:', session);
+
+  if (status === 'loading') {
+    return (
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography color="white">Indlæser...</Typography>
+      </Box>
+    );
+  }
+
+  if (!session) {
     return (
       <Box
         sx={{
@@ -42,21 +62,21 @@ export default function Home() {
           </Box>
 
           {/* Login Form */}
-          <CustomSignIn />
+          <NextAuthSignIn />
         </Paper>
       </Box>
     );
   }
 
-  // Convert Stack user to our app user format
+  // User is logged in
   const appUser = {
-    id: parseInt(user.id),
-    name: user.displayName || user.primaryEmail || '',
-    email: user.primaryEmail || '',
-    role: 'parent' as const, // Default role for now, we'll enhance this later
-    child_id: undefined,
-    child_name: undefined,
+    id: parseInt(session.user.id || '0'),
+    name: session.user.name || session.user.email || '',
+    email: session.user.email || '',
+    role: session.user.role || 'parent'
   };
 
-  return <AppContent user={appUser} onLogout={() => user.signOut()} />;
+  return <AppContent user={appUser} onLogout={() => {
+    window.location.href = '/api/auth/signout';
+  }} />;
 }

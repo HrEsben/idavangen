@@ -196,11 +196,23 @@ export async function getLogEntriesStats(days: number = 30) {
         SUM(CASE WHEN school_attendance THEN 1 ELSE 0 END) as school_days,
         ROUND(AVG(school_hours), 1) as avg_school_hours
       FROM log_entries 
-      WHERE date >= CURRENT_DATE - INTERVAL '${days} days'
+      WHERE date >= CURRENT_DATE - INTERVAL '1 day' * ${days}
       GROUP BY category
       ORDER BY count DESC
     `;
-    return { success: true, data: result };
+    
+    // Convert numeric strings to actual numbers
+    const processedResult = result.map(row => ({
+      ...row,
+      count: parseInt(row.count) || 0,
+      avg_mood: row.avg_mood ? parseFloat(row.avg_mood) : null,
+      avg_energy: row.avg_energy ? parseFloat(row.avg_energy) : null,
+      avg_anxiety: row.avg_anxiety ? parseFloat(row.avg_anxiety) : null,
+      school_days: parseInt(row.school_days) || 0,
+      avg_school_hours: row.avg_school_hours ? parseFloat(row.avg_school_hours) : null
+    }));
+    
+    return { success: true, data: processedResult };
   } catch (error) {
     console.error('Error fetching log stats:', error);
     return { success: false, error };

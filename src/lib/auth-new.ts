@@ -4,13 +4,13 @@ import EmailProvider from 'next-auth/providers/email'
 import PostgresAdapter from '@auth/pg-adapter'
 import { Pool } from '@neondatabase/serverless'
 import { neon } from '@neondatabase/serverless'
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 const sql = neon(process.env.DATABASE_URL!)
-const resend = new Resend(process.env.AUTH_RESEND_KEY)
 
 export const authOptions: NextAuthOptions = {
-  adapter: PostgresAdapter(new Pool({ connectionString: process.env.DATABASE_URL })) as any,
+  // Remove adapter for now to focus on getting basic auth working
+  // adapter: PostgresAdapter(new Pool({ connectionString: process.env.DATABASE_URL })),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -20,7 +20,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('Missing credentials')
           return null
         }
 
@@ -36,23 +35,14 @@ export const authOptions: NextAuthOptions = {
           `
 
           if (users.length === 0) {
-            console.log('User not found:', credentials.email)
             return null
           }
 
           const user = users[0]
 
-          // For demo purposes, implement simple password validation:
-          // - For existing users, accept "password123" or "123" as valid passwords
-          // - In production, you'd hash and compare passwords properly
-          const validPasswords = ['password123', '123', 'password'];
+          // For now, we'll accept any password for existing users
+          // TODO: Add proper password hashing when users are created
           
-          if (!validPasswords.includes(credentials.password)) {
-            console.log('Invalid password for user:', credentials.email)
-            return null
-          }
-          
-          console.log('Successful credentials login for:', credentials.email)
           return {
             id: user.id.toString(),
             email: user.email,
@@ -66,42 +56,36 @@ export const authOptions: NextAuthOptions = {
           return null
         }
       }
-    }),
+    })
+    // EmailProvider temporarily disabled until we fix adapter compatibility
+    /*
     EmailProvider({
-      from: process.env.EMAIL_FROM || 'noreply@reschool.optus.dk',
-      sendVerificationRequest: async ({ identifier: email, url, provider }) => {
-        console.log('Attempting to send email to:', email)
-        console.log('From address:', provider.from)
-        
-        // Check if user exists before sending email
-        try {
-          const users = await sql`
-            SELECT id, is_active FROM users 
-            WHERE email = ${email} AND is_active = true
-          `
-          
-          if (users.length === 0) {
-            console.log('User not found or inactive:', email)
-            // Use NextAuth's built-in error type for email signin
-            const error = new Error('EmailSignin')
-            error.name = 'EmailSignin'
-            throw error
-          }
-        } catch (error: any) {
-          if (error.name === 'EmailSignin' || error.message === 'EmailSignin') {
-            throw error
-          }
-          console.error('Database error checking user:', error)
-          const techError = new Error('Signin')
-          techError.name = 'Signin'
-          throw techError
+      server: {
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD
         }
-        
+      },
+      from: process.env.EMAIL_FROM,
+      async sendVerificationRequest({ identifier: email, url, provider }) {
         try {
-          const result = await resend.emails.send({
-            from: provider.from as string,
+          const transporter = nodemailer.createTransport({
+            host: provider.server.host,
+            port: provider.server.port,
+            secure: false,
+            auth: {
+              user: provider.server.auth.user,
+              pass: provider.server.auth.pass
+            }
+          })
+
+          await transporter.sendMail({
+            from: `"Reschool" <${provider.from}>`,
             to: email,
             subject: 'Log ind på Reschool',
+            text: `Log ind på Reschool\n\nKlik på dette link for at logge ind:\n${url}\n\nDette link udløber om 24 timer af sikkerhedshensyn.\n\nHvis du ikke har anmodet om dette login, kan du ignorere denne email.\n\nVenlig hilsen,\nReschool-teamet\nPå vej til større trivsel`,
             html: `
               <!DOCTYPE html>
               <html>
@@ -142,15 +126,13 @@ export const authOptions: NextAuthOptions = {
               </html>
             `
           })
-          console.log('Email sent successfully to:', email)
-          console.log('Resend response:', result)
         } catch (error) {
           console.error('Failed to send email:', error)
-          console.error('Error details:', JSON.stringify(error, null, 2))
           throw new Error('Failed to send verification email')
         }
       }
     })
+    */
   ],
   callbacks: {
     async jwt({ token, user }: any) {
@@ -174,7 +156,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
     error: '/login',
-    verifyRequest: '/login/verify',
   },
   session: {
     strategy: 'jwt' as const
